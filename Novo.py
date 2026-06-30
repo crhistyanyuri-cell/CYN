@@ -59,7 +59,7 @@ exemplos.append((5, 5, 10))
 exemplos.append((10, 10, 20))
 exemplos.append((10, 20, 30))
 exemplos.append((5, 7, 12))
-exemplos.append((1, 1, 2))
+
 exemplos.append((8, 4, 12))
 
 # Ensinar exemplos de multiplicação

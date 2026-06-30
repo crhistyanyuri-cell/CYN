@@ -1,5 +1,6 @@
 
 import cabeça
+cabeça.exibir_cabeca()
 """
 SISTEMA DE APRENDIZADO - VERSÃO CORRIGIDA
 Com tratamento de erros e mais estável!

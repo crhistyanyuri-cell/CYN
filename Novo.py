@@ -13,6 +13,8 @@ exemplos = []
 # Ensinar exemplos de soma
 print("\n📖 Ensinando exemplos básicos...")
 exemplos.append((2, 3, 5))
+exemplos.append((4, 1, 5))
+exemplos.append((1, 4, 5))
 exemplos.append((10, 20, 30))
 exemplos.append((5, 7, 12))
 exemplos.append((1, 1, 2))

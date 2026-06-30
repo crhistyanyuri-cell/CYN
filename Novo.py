@@ -12,6 +12,12 @@ exemplos = []
 
 # Ensinar exemplos de soma
 print("\n📖 Ensinando exemplos básicos...")
+exemplos.append((1, 1, 2))
+exemplos.append((1, 2, 3))
+exemplos.append((2, 1, 3))
+exemplos.append((2, 2, 4))
+exemplos.append((1, 3, 4))
+exemplos.append((3, 1, 4))
 exemplos.append((2, 3, 5))
 exemplos.append((4, 1, 5))
 exemplos.append((1, 4, 5))
@@ -21,9 +27,9 @@ exemplos.append((1, 1, 2))
 exemplos.append((8, 4, 12))
 
 # Ensinar exemplos de multiplicação
-exemplos.append((2* 3, 6))
-exemplos.append((4 * 5, 20))
-exemplos.append((3 * 3, 9))
+exemplos.append((2, 3, 6))
+exemplos.append((4, 5, 20))
+exemplos.append((3, 3, 9))
 print("✅ Exemplos ensinados!\n")
 
 def prever(a, b):

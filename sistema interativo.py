@@ -59,18 +59,12 @@ class SistemaAprendiz:
         return self._prever(entrada)
     
     def perguntar(self, pergunta):
-        """
-        Processa uma pergunta do usuário
-        Exemplos: "2 + 3", "5 * 4", "10 / 2", "3 ** 2"
-        """
+        """Processa uma pergunta do usuário"""
         pergunta = pergunta.strip()
         
-        # Tenta interpretar a pergunta
         try:
-            # Remove espaços extras
             pergunta = pergunta.replace(" ", "")
             
-            # Verifica se é uma operação matemática
             if '+' in pergunta:
                 partes = pergunta.split('+')
                 a = float(partes[0])
@@ -115,16 +109,15 @@ class SistemaAprendiz:
                     partes = pergunta.split('^')
                 a = float(partes[0])
                 b = float(partes[1])
-                # Para potência, usamos apenas 1 entrada
                 resultado = self.prever([a])
                 self.historico.append((pergunta, resultado))
                 return f"{a} ^ {b} = {resultado:.4f} (aproximado)"
             
             else:
-                return f"❌ Não entendi a pergunta: {pergunta}\nUse: 2+3, 5*4, 10-3, 8/2, 3**2"
+                return f"❌ Não entendi: {pergunta}\nUse: 2+3, 5*4, 10-3, 8/2, 3**2"
         
         except Exception as e:
-            return f"❌ Erro ao processar: {e}"
+            return f"❌ Erro: {e}"
     
     def mostrar_historico(self):
         """Mostra o histórico de perguntas"""
@@ -150,11 +143,8 @@ class SistemaAprendiz:
         print("="*50)
 
 
-# ====================================================
-# PROGRAMA PRINCIPAL - INTERATIVO
-# ====================================================
-
 def main():
+    """Função principal do programa"""
     print("="*60)
     print("🧠 SISTEMA DE APRENDIZADO INTERATIVO")
     print("="*60)

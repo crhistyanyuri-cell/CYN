@@ -124,7 +124,7 @@ print("✅ SISTEMA FUNCIONANDO CORRETAMENTE!")
 print("="*50)
 
 # ===== TESTE COM MULTIPLICAÇÃO =====
-print("\n📖 ENSINANDO MULTIPLICAÇÃO...")
+print()
 
 sistema2 = SistemaAprendiz()
 sistema2.ensinar([2, 3], 6)

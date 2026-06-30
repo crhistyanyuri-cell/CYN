@@ -1,3 +1,4 @@
+
 """
 SISTEMA DE APRENDIZADO - VERSÃO ESTÁVEL
 Números controlados, sem explosão!

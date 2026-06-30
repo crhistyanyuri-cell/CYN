@@ -1,0 +1,258 @@
+"""
+SISTEMA DE APRENDIZADO - VERSÃO INTERATIVA
+Você faz perguntas e o sistema responde!
+"""
+
+class SistemaAprendiz:
+    def __init__(self, nome="Sistema"):
+        self.nome = nome
+        self.exemplos = []
+        self.pesos = []
+        self.operacao = "geral"
+        self.erro_medio = 0
+        self.historico = []  # Guarda as perguntas e respostas
+    
+    def ensinar(self, entrada, saida):
+        """Adiciona um exemplo e treina"""
+        self.exemplos.append((entrada.copy(), saida))
+        self._treinar()
+    
+    def _treinar(self):
+        """Treina o modelo com gradiente descendente"""
+        if len(self.exemplos) < 2:
+            n_features = len(self.exemplos[0][0]) if self.exemplos else 1
+            self.pesos = [0.0] * (n_features + 1)
+            return
+        
+        n_features = len(self.exemplos[0][0])
+        
+        if len(self.pesos) != n_features + 1:
+            self.pesos = [0.0] * (n_features + 1)
+        
+        taxa_aprendizado = 0.001
+        epocas = 2000
+        
+        for _ in range(epocas):
+            for entrada, saida_real in self.exemplos:
+                previsao = self._prever(entrada)
+                erro = saida_real - previsao
+                
+                for i in range(n_features):
+                    self.pesos[i] += taxa_aprendizado * erro * entrada[i]
+                self.pesos[-1] += taxa_aprendizado * erro
+    
+    def _prever(self, entrada):
+        """Faz previsão interna"""
+        if not self.pesos:
+            return 0
+        
+        resultado = self.pesos[-1]
+        for i, valor in enumerate(entrada):
+            if i < len(self.pesos) - 1:
+                resultado += self.pesos[i] * valor
+        return resultado
+    
+    def prever(self, entrada):
+        """Faz uma previsão para novos dados"""
+        if not self.pesos:
+            return 0
+        return self._prever(entrada)
+    
+    def perguntar(self, pergunta):
+        """
+        Processa uma pergunta do usuário
+        Exemplos: "2 + 3", "5 * 4", "10 / 2", "3 ** 2"
+        """
+        pergunta = pergunta.strip()
+        
+        # Tenta interpretar a pergunta
+        try:
+            # Remove espaços extras
+            pergunta = pergunta.replace(" ", "")
+            
+            # Verifica se é uma operação matemática
+            if '+' in pergunta:
+                partes = pergunta.split('+')
+                a = float(partes[0])
+                b = float(partes[1])
+                resultado = self.prever([a, b])
+                self.historico.append((pergunta, resultado))
+                return f"{a} + {b} = {resultado:.4f}"
+            
+            elif '*' in pergunta or 'x' in pergunta:
+                if '*' in pergunta:
+                    partes = pergunta.split('*')
+                else:
+                    partes = pergunta.split('x')
+                a = float(partes[0])
+                b = float(partes[1])
+                resultado = self.prever([a, b])
+                self.historico.append((pergunta, resultado))
+                return f"{a} * {b} = {resultado:.4f}"
+            
+            elif '-' in pergunta:
+                partes = pergunta.split('-')
+                a = float(partes[0])
+                b = float(partes[1])
+                resultado = self.prever([a, b])
+                self.historico.append((pergunta, resultado))
+                return f"{a} - {b} = {resultado:.4f}"
+            
+            elif '/' in pergunta:
+                partes = pergunta.split('/')
+                a = float(partes[0])
+                b = float(partes[1])
+                if b == 0:
+                    return "❌ Erro: Divisão por zero!"
+                resultado = self.prever([a, b])
+                self.historico.append((pergunta, resultado))
+                return f"{a} / {b} = {resultado:.4f}"
+            
+            elif '**' in pergunta or '^' in pergunta:
+                if '**' in pergunta:
+                    partes = pergunta.split('**')
+                else:
+                    partes = pergunta.split('^')
+                a = float(partes[0])
+                b = float(partes[1])
+                # Para potência, usamos apenas 1 entrada
+                resultado = self.prever([a])
+                self.historico.append((pergunta, resultado))
+                return f"{a} ^ {b} = {resultado:.4f} (aproximado)"
+            
+            else:
+                return f"❌ Não entendi a pergunta: {pergunta}\nUse: 2+3, 5*4, 10-3, 8/2, 3**2"
+        
+        except Exception as e:
+            return f"❌ Erro ao processar: {e}"
+    
+    def mostrar_historico(self):
+        """Mostra o histórico de perguntas"""
+        if not self.historico:
+            print("\n📝 Nenhuma pergunta ainda!")
+            return
+        
+        print("\n" + "="*50)
+        print("📝 HISTÓRICO DE PERGUNTAS")
+        print("="*50)
+        for i, (pergunta, resposta) in enumerate(self.historico, 1):
+            print(f"{i}: {pergunta} -> {resposta}")
+        print("="*50)
+    
+    def mostrar_exemplos(self):
+        """Mostra os exemplos aprendidos"""
+        print("\n" + "="*50)
+        print("📚 EXEMPLOS APRENDIDOS")
+        print("="*50)
+        for i, (entrada, saida) in enumerate(self.exemplos):
+            pred = self.prever(entrada)
+            print(f"{i+1}: {entrada} -> {saida:.2f} | Previsto: {pred:.4f}")
+        print("="*50)
+
+
+# ====================================================
+# PROGRAMA PRINCIPAL - INTERATIVO
+# ====================================================
+
+def main():
+    print("="*60)
+    print("🧠 SISTEMA DE APRENDIZADO INTERATIVO")
+    print("="*60)
+    print("\n💡 O sistema aprende com exemplos!")
+    print("📖 Digite 'ajuda' para ver os comandos")
+    print("🔢 Digite 'ensinar' para adicionar exemplos")
+    print("❓ Digite 'sair' para encerrar")
+    print("="*60)
+    
+    # Criar o sistema
+    sistema = SistemaAprendiz("Matemático")
+    
+    # Ensinar exemplos básicos
+    print("\n📖 Ensinando exemplos básicos...")
+    sistema.ensinar([2, 3], 5)      # Soma
+    sistema.ensinar([10, 20], 30)
+    sistema.ensinar([5, 7], 12)
+    sistema.ensinar([2, 3], 6)      # Multiplicação
+    sistema.ensinar([4, 5], 20)
+    sistema.ensinar([3, 3], 9)
+    sistema.ensinar([1], 1)         # Quadrática
+    sistema.ensinar([2], 4)
+    sistema.ensinar([3], 9)
+    print("✅ Exemplos básicos ensinados!\n")
+    
+    # Loop interativo
+    while True:
+        # Pega a pergunta do usuário
+        pergunta = input("\n🔢 Digite sua pergunta: ").strip()
+        
+        # Verifica comandos especiais
+        if pergunta.lower() == 'sair':
+            print("\n👋 Até logo!")
+            break
+        
+        elif pergunta.lower() == 'ajuda':
+            print("\n" + "="*50)
+            print("📖 COMANDOS DISPONÍVEIS:")
+            print("="*50)
+            print("  • 2 + 3      -> Soma")
+            print("  • 5 * 4      -> Multiplicação")
+            print("  • 10 - 3     -> Subtração")
+            print("  • 8 / 2      -> Divisão")
+            print("  • 3 ** 2     -> Potência")
+            print("  • 2 x 3      -> Multiplicação (alternativo)")
+            print("  • ensinar    -> Ensinar novo exemplo")
+            print("  • exemplos   -> Ver exemplos aprendidos")
+            print("  • historico  -> Ver histórico de perguntas")
+            print("  • limpar     -> Limpar histórico")
+            print("  • sair       -> Sair do programa")
+            print("="*50)
+            continue
+        
+        elif pergunta.lower() == 'exemplos':
+            sistema.mostrar_exemplos()
+            continue
+        
+        elif pergunta.lower() == 'historico':
+            sistema.mostrar_historico()
+            continue
+        
+        elif pergunta.lower() == 'limpar':
+            sistema.historico = []
+            print("🧹 Histórico limpo!")
+            continue
+        
+        elif pergunta.lower() == 'ensinar':
+            print("\n📖 Vamos ensinar um novo exemplo!")
+            try:
+                entrada_str = input("  Digite os valores de entrada (ex: 2,3): ")
+                saida_str = input("  Digite o resultado esperado (ex: 5): ")
+                
+                entrada = [float(x.strip()) for x in entrada_str.split(',')]
+                saida = float(saida_str)
+                
+                sistema.ensinar(entrada, saida)
+                print(f"✅ Exemplo {entrada} -> {saida} ensinado com sucesso!")
+            except Exception as e:
+                print(f"❌ Erro ao ensinar: {e}")
+            continue
+        
+        # Se não for comando especial, processa como pergunta
+        if pergunta:
+            resposta = sistema.perguntar(pergunta)
+            print(f"\n🧠 Resposta: {resposta}")
+
+
+# ====================================================
+# EXECUTAR O PROGRAMA
+# ====================================================
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n👋 Programa interrompido pelo usuário!")
+    except Exception as e:
+        print(f"\n❌ Erro inesperado: {e}")
+    
+    # Mantém a janela aberta
+    input("\nPressione ENTER para sair...")

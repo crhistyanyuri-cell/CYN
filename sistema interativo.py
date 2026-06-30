@@ -1,12 +1,12 @@
 
 import cabeça
-cabeça.exibir_cabeca()
+cabeça. SistemaAprendiz
 """
 SISTEMA DE APRENDIZADO - VERSÃO CORRIGIDA
 Com tratamento de erros e mais estável!
 """
 
-class SistemaAprendiz:
+class SistemaAprendiz2:
     def __init__(self, nome="Sistema"):
         self.nome = nome
         self.exemplos = []
@@ -162,7 +162,7 @@ def main():
     print("❓ Digite 'sair' para encerrar")
     print("="*60)
     
-    sistema = SistemaAprendiz("Matemático")
+    sistema = SistemaAprendiz2("Matemático")
     
     print("\n📖 Ensinando exemplos básicos...")
     sistema.ensinar([2, 3], 5)
